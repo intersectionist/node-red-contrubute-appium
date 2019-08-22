@@ -92,3 +92,4 @@ typings/
 /adb-nodes.iml
 /package-lock.json
 /.idea/
+.DS_Store
