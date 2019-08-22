@@ -59,7 +59,7 @@ module.exports = function (RED) {
 
                         timerStatus();
                     } else {
-                        node.info('Set timeout to ' + config.implicit_wait, msg);
+                        // node.warn('Set timeout to ' + config.implicit_wait, msg);
                         cb();
                     }
                 });
