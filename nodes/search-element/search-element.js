@@ -67,7 +67,7 @@ module.exports = function (RED) {
 
             var search = function () {
                 node.error('retry search ' + retry_count, msg);
-                msg.payload.retry_count = retry_count;
+                // msg.payload.retry_count = retry_count;
                 request.post({
                     url: server_address + '/wd/hub/session/' + appium_session_id + '/element',
                     json: {
