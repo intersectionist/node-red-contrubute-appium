@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    RED.nodes.registerType('send-keys', {
+        category: 'Appium',
+        color: '#a36fcf',
+        defaults: {
+            name: {value: ""},
+            text_value: {value: ""},
+        },
+        inputs: 1,
+        outputs: 2,
+        icon: "font-awesome/fa-keyboard-o",
+        label: function () {
+            return this.name || this.text_value || "Value";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="send-keys">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-text_value"><i class="icon-tag"></i> Value</label>
+        <input type="text" id="node-input-text_value" placeholder="test">
+    </div>
+
+
+</script>
+
+<script type="text/x-red" data-help-name="send-keys">
+    <p>A simple node that converts the message payloads into all lower-case characters</p>
+
+</script>

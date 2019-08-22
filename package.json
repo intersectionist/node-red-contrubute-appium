@@ -1,0 +1,24 @@
+{
+  "name": "appium-nodes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "appium-config": "nodes/configs/appium-config.js",
+      "search-element": "nodes/search-element/search-element.js",
+      "click-element": "nodes/click-element/click-element.js",
+      "send-keys": "nodes/send-keys/send-keys.js",
+      "end-session": "nodes/end-session/end-session.js",
+      "start-session": "nodes/start-session/start-session.js"
+    }
+  },
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

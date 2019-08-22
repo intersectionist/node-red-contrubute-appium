@@ -1,0 +1,83 @@
+<script type="text/javascript">
+    RED.nodes.registerType('search-element', {
+        category: 'Appium',
+        color: '#cfcf80',
+        defaults: {
+            name: {value: ""},
+            selector_type: {value: ""},
+            selector_value: {value: ""},
+            retry_limit: {value: "3"},
+            implicit_wait: {value: "1000"},
+        },
+        inputs: 1,
+        outputs: 2,
+        icon: "font-awesome/fa-search",
+        label: function () {
+            return this.name || this.selector_type + '( ' + this.selector_value + ' )' || "Search element";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="search-element">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-selector_type"><i class="icon-folder-close"></i> Selector Type</label>
+        <select id="node-input-selector_type">
+            <option value="" disabled></option>
+            <option value="checkable">checkable</option>
+            <option value="checked">checked</option>
+            <option value="childSelector">childSelector</option>
+            <option value="className">className</option>
+            <option value="classNameMatches">classNameMatches</option>
+            <option value="clickable">clickable</option>
+            <option value="description">description</option>
+            <option value="descriptionContains">descriptionContains</option>
+            <option value="descriptionMatches">descriptionMatches(String regex)</option>
+            <option value="descriptionStartsWith">descriptionStartsWith(String desc)</option>
+            <option value="enabled">enabled(boolean val)</option>
+            <option value="focusable">focusable(boolean val)</option>
+            <option value="focused">focused(boolean val)</option>
+            <option value="index">index(int index)</option>
+            <option value="instance">instance(int instance)</option>
+            <option value="longClickable">longClickable(boolean val)</option>
+            <option value="packageName">packageName(String name)</option>
+            <option value="packageNameMatches">packageNameMatches(String regex)</option>
+            <option value="resourceId">resourceId(String id)</option>
+            <option value="resourceIdMatches">resourceIdMatches(String regex)</option>
+            <option value="scrollable">scrollable(boolean val)</option>
+            <option value="selected">selected(boolean val)</option>
+            <option value="text">text(String text)</option>
+            <option value="textContains">textContains(String text)</option>
+            <option value="textMatches">textMatches(String regex)</option>
+            <option value="textStartsWith">textStartsWith(String text)</option>
+        </select>
+    </div>
+     <div class="form-row">
+        <label for="node-input-selector_value"><i class="icon-tag"></i> Selector Value</label>
+        <input type="text" id="node-input-selector_value" placeholder="Selector Value">
+    </div>
+
+     <div class="form-row">
+        <label for="node-input-retry_limit"><i class="icon-tag"></i> Retry Limit</label>
+        <input type="text" id="node-input-retry_limit" placeholder="Retry Limit">
+    </div>
+
+     <div class="form-row">
+        <label for="node-input-implicit_wait"><i class="icon-tag"></i> Implicit Wait</label>
+        <input type="text" id="node-input-implicit_wait" placeholder="Implicit Wait">
+    </div>
+
+
+
+</script>
+
+<script type="text/x-red" data-help-name="search-element">
+    <p>A simple node that converts the message payloads into all lower-case characters</p>
+
+
+
+</script>
