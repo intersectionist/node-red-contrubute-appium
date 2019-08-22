@@ -13,11 +13,11 @@ module.exports = function (RED) {
             var server_address = this.server.host + ':' + this.server.port;
             var url = server_address + '/wd/hub/session';
 
-            var platform = msg.platform || config.platform;
-            var platform_version = msg.platform_version || config.platform_version;
-            var device_name = msg.device_name || config.device_name;
+            var platform = msg.platform || config.payload.platform || config.platform;
+            var platform_version = msg.platform_version || msg.payload.platform_version || config.platform_version;
+            var device_name = msg.device_name || msg.payload.device_name || config.device_name;
             var app = msg.app || config.app;
-            var new_command_timeout = msg.new_command_timeout || config.new_command_timeout;
+            var new_command_timeout = msg.new_command_timeout || config.payload.new_command_timeout || config.new_command_timeout;
 
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
             request.post({
