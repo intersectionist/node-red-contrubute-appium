@@ -17,7 +17,7 @@ module.exports = function (RED) {
             var platform_version = msg.platform_version || msg.payload.platform_version || config.platform_version;
             var device_name = msg.device_name || msg.payload.device_name || config.device_name;
             var app = msg.app || config.app;
-            var new_command_timeout = msg.new_command_timeout || config.payload.new_command_timeout || config.new_command_timeout;
+            var new_command_timeout = msg.new_command_timeout || msg.payload.new_command_timeout || config.new_command_timeout;
 
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
             request.post({
