@@ -9,10 +9,12 @@ module.exports = function (RED) {
         var timer;
         node.on('input', function (msg) {
 
+            var url = msg.payload.url || msg.url;
+            var appium_config = msg.payload.appium_config || msg.appium_config;
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
             request.post({
                 url: url,
-                json:  msg.payload
+                json: appium_config
             }, function (e, r, body) {
                 if (e) {
                     node.error(e, msg);
