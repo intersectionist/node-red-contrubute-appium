@@ -10,11 +10,11 @@
   "license": "ISC",
   "node-red": {
     "nodes": {
-      "appium-config": "nodes/configs/appium-config.js",
       "search-element": "nodes/search-element/search-element.js",
       "click-element": "nodes/click-element/click-element.js",
       "send-keys": "nodes/send-keys/send-keys.js",
       "end-session": "nodes/end-session/end-session.js",
+      "go-back": "nodes/back/back.js",
       "start-session": "nodes/start-session/start-session.js"
     }
   },
