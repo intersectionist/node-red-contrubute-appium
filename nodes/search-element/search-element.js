@@ -69,9 +69,12 @@ module.exports = function (RED) {
                 node.error('retry search ' + retry_count, msg);
                 msg.payload = {
                     retry_count: retry_count
-                }
+                };
+
+                var url = server_address + '/wd/hub/session/' + appium_session_id + '/element';
+                node.log('url ' + url, msg);
                 request.post({
-                    url: server_address + '/wd/hub/session/' + appium_session_id + '/element',
+                    url: url,
                     json: {
                         "using": "-android uiautomator",
                         "value": 'new UiSelector().' + config.selector_type + '("' + config.selector_value + '")'
@@ -98,7 +101,7 @@ module.exports = function (RED) {
                         msg.payload = {
                             error: body.value.message
                         };
-
+                        node.log('response: ' + body.value.message + ', status_code:' + r.statusCode, msg);
                         retry_count++;
                         if (retry_count >= config.retry_limit) {
                             node.status({fill: "red", shape: "dot", text: body.value.message});
@@ -130,8 +133,8 @@ module.exports = function (RED) {
                         };
                         node.status({fill: "green", shape: "dot", text: 'Founded!'});
                         node.send([msg]);
-                        timerStatus();
                     }
+                    timerStatus();
 
                 });
             };

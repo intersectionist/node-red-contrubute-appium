@@ -5,12 +5,11 @@ module.exports = function (RED) {
 
     function StartSessionNode(config) {
         RED.nodes.createNode(this, config);
-        this.server = RED.nodes.getNode(config.server);
         var node = this;
         var timer;
         node.on('input', function (msg) {
 
-            var server_address = this.server.host + ':' + this.server.port;
+            var server_address = msg.server_address || msg.payload.server_address || config.server_address;
             var url = server_address + '/wd/hub/session';
 
             var platform = msg.platform || msg.payload.platform || config.platform;
