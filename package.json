@@ -15,6 +15,7 @@
       "send-keys": "nodes/send-keys/send-keys.js",
       "end-session": "nodes/end-session/end-session.js",
       "go-back": "nodes/back/back.js",
+      "set-location": "nodes/set-location/set-location.js",
       "start-session": "nodes/start-session/start-session.js"
     }
   },

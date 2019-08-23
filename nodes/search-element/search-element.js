@@ -72,7 +72,7 @@ module.exports = function (RED) {
                 };
 
                 var url = server_address + '/wd/hub/session/' + appium_session_id + '/element';
-                node.log('url ' + url, msg);
+                // node.log('url ' + url, msg);
                 request.post({
                     url: url,
                     json: {
@@ -101,7 +101,7 @@ module.exports = function (RED) {
                         msg.payload = {
                             error: body.value.message
                         };
-                        node.log('response: ' + body.value.message + ', status_code:' + r.statusCode, msg);
+                        // node.log('response: ' + body.value.message + ', status_code:' + r.statusCode, msg);
                         retry_count++;
                         if (retry_count >= config.retry_limit) {
                             node.status({fill: "red", shape: "dot", text: body.value.message});
