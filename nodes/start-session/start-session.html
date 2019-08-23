@@ -4,12 +4,6 @@
         color: '#a9cf80',
         defaults: {
             name: {value: ""},
-            server_address: {value: ""},
-            platform: {value: "android"},
-            platform_version: {value: null},
-            device_name: {value: null},
-            app: {value: null},
-            new_command_timeout: {value: 120},
         },
         inputs: 1,
         outputs: 2,
@@ -25,41 +19,21 @@
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-    <div class="form-row">
-        <label for="node-input-server"><i class="icon-tag"></i> Server</label>
-        <input type="text" id="node-input-server" placeholder="Server">
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-platform"><i class="icon-folder-close"></i> Platform</label>
-        <select id="node-input-platform">
-            <option value="" disabled></option>
-            <option value="android">Android</option>
-            <option value="ios">IOS</option>
-        </select>
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-platform_version"><i class="icon-tag"></i> Platform Version</label>
-        <input type="text" id="node-input-platform_version" placeholder="Platform version">
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-device_name"><i class="icon-tag"></i> Device Name</label>
-        <input type="text" id="node-input-device_name" placeholder="Device Name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-app"><i class="icon-tag"></i> App</label>
-        <input type="text" id="node-input-app" placeholder="App">
-    </div>
-    <div class="form-row">
-        <label for="node-input-new_command_timeout"><i class="icon-tag"></i> New Command Timeout</label>
-        <input type="text" id="node-input-new_command_timeout" placeholder="3600 second">
-    </div>
-
 </script>
 
 <script type="text/x-red" data-help-name="start-session">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    {
+  "desiredCapabilities": {
+    "platformName": "Android",
+    "deviceName": "123456",
+    "app": "test.com.apk",
+    "automationName": "UiAutomator2",
+    "newCommandTimeout": "3600",
+    "udid": "123456",
+    "appPackage": "com.app.test",
+    "fullReset": true,
+    "disableAndroidWatchers": true
+  }
+}
 
 </script>
