@@ -9,8 +9,9 @@ module.exports = function (RED) {
         var timer;
         node.on('input', function (msg) {
 
-            var url = msg.payload.url || msg.url;
-            url += '/wd/hub/session';
+            var server_address = msg.payload.url || msg.url;
+            var url = server_address + '/wd/hub/session';
+            msg.server_address = server_address;
             var appium_config = msg.payload.appium_config || msg.appium_config;
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
             request.post({
