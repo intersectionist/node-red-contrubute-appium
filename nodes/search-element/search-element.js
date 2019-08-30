@@ -71,7 +71,13 @@ module.exports = function (RED) {
                     retry_count: retry_count
                 };
 
-                var url = server_address + '/wd/hub/session/' + appium_session_id + '/element';
+                var endpoint = '/element';
+
+                if (config.multiple_search) {
+                    endpoint = '/elements';
+                }
+
+                var url = server_address + '/wd/hub/session/' + appium_session_id + endpoint;
                 // node.log('url ' + url, msg);
                 request.post({
                     url: url,
