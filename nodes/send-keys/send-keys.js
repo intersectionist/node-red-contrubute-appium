@@ -12,7 +12,7 @@ module.exports = function (RED) {
             node.status({fill: "yellow", shape: "dot", text: 'sending keys..'});
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
             var elment_id = msg.element_id || msg.payload.element_id || null;
-            var server_address = msg.server_address || msg.payload.server_address || 'http://0.0.0.0:4723' || null;
+            var server_address = msg.server_address || msg.payload.server_address || null;
             var send_key_value = msg.send_key_value || msg.payload.send_key_value || config.text_value || null;
 
             if (!server_address)

@@ -13,7 +13,7 @@ module.exports = function (RED) {
             var retry_count = 0;
 
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
-            var server_address = msg.server_address || msg.payload.server_address || 'http://0.0.0.0:4723' || null;
+            var server_address = msg.server_address || msg.payload.server_address || null;
 
             if (!server_address)
                 return node.error('server_address required', msg);
@@ -79,78 +79,83 @@ module.exports = function (RED) {
 
                 var url = server_address + '/wd/hub/session/' + appium_session_id + endpoint;
                 // node.log('url ' + url, msg);
-                request.post({
-                    url: url,
-                    json: {
-                        "using": "-android uiautomator",
-                        "value": 'new UiSelector().' + config.selector_type + '("' + config.selector_value + '")'
-                    }
-                }, function (e, r, body) {
-                    if (e) {
-                        //node.error(e, msg);
-                        retry_count++;
-                        msg.payload = {
-                            error: e,
-                            retry_count: retry_count
-                        };
-
-                        node.error(e.message, msg);
-                        if (retry_count >= config.retry_limit) {
-                            node.status({fill: "red", shape: "dot", text: e.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            search();
+                try {
+                    request.post({
+                        url: url,
+                        json: {
+                            "using": "-android uiautomator",
+                            "value": 'new UiSelector().' + config.selector_type + '("' + config.selector_value + '")'
                         }
-                    } else if (r.statusCode !== 200) {
-                        // node.warn(body.value.message, msg);
-                        msg.payload = {
-                            error: body.value.message
-                        };
-                        // node.log('response: ' + body.value.message + ', status_code:' + r.statusCode, msg);
-                        retry_count++;
-                        if (retry_count >= config.retry_limit) {
-                            node.status({fill: "red", shape: "dot", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            search();
-                        }
-                    } else if (body.status !== 0) {
-                        //  node.warn(body.value.message, msg);
-                        msg.payload = {
-                            error: body.value.message
-                        };
-
-                        retry_count++;
-                        if (retry_count >= config.retry_limit) {
-                            node.status({fill: "red", shape: "dot", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            search();
-                        }
-                    } else {
-                        msg.appium_session_id = body.sessionId;
-                        if(config.multiple_search){
-                            //msg.element_id = body.value.ELEMENT;
-                            msg.payload = body.value;
-                            node.status({fill: "green", shape: "dot", text: 'Founded!'});
-                            node.send([msg]);
-                        }else{
-                            msg.element_id = body.value.ELEMENT;
+                    }, function (e, r, body) {
+                        if (e) {
+                            //node.error(e, msg);
+                            retry_count++;
                             msg.payload = {
-                                session_id: body.sessionId,
-                                element_id: body.value.ELEMENT,
+                                error: e,
+                                retry_count: retry_count
                             };
-                            node.status({fill: "green", shape: "dot", text: 'Founded!'});
-                            node.send([msg]);
+
+                            node.error(e.message, msg);
+                            if (retry_count >= config.retry_limit) {
+                                node.status({fill: "red", shape: "dot", text: e.message});
+                                node.send([null, msg]);
+                            } else {
+                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                                search();
+                            }
+                        } else if (r.statusCode !== 200) {
+                            // node.warn(body.value.message, msg);
+                            msg.payload = {
+                                error: body.value.message
+                            };
+                            // node.log('response: ' + body.value.message + ', status_code:' + r.statusCode, msg);
+                            retry_count++;
+                            if (retry_count >= config.retry_limit) {
+                                node.status({fill: "red", shape: "dot", text: body.value.message});
+                                node.send([null, msg]);
+                            } else {
+                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                                search();
+                            }
+                        } else if (body.status !== 0) {
+                            //  node.warn(body.value.message, msg);
+                            msg.payload = {
+                                error: body.value.message
+                            };
+
+                            retry_count++;
+                            if (retry_count >= config.retry_limit) {
+                                node.status({fill: "red", shape: "dot", text: body.value.message});
+                                node.send([null, msg]);
+                            } else {
+                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                                search();
+                            }
+                        } else {
+                            msg.appium_session_id = body.sessionId;
+                            if (config.multiple_search) {
+                                //msg.element_id = body.value.ELEMENT;
+                                msg.payload = body.value;
+                                node.status({fill: "green", shape: "dot", text: 'Founded!'});
+                                node.send([msg]);
+                            } else {
+                                msg.element_id = body.value.ELEMENT;
+                                msg.payload = {
+                                    session_id: body.sessionId,
+                                    element_id: body.value.ELEMENT,
+                                };
+                                node.status({fill: "green", shape: "dot", text: 'Founded!'});
+                                node.send([msg]);
+                            }
+
                         }
+                        timerStatus();
 
-                    }
-                    timerStatus();
-
-                });
+                    });
+                } catch (e) {
+                    node.status({fill: "red", shape: "dot", text: e});
+                    node.send([null, msg]);
+                }
             };
             set_implicit_wait(search);
 

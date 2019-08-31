@@ -11,7 +11,7 @@ module.exports = function (RED) {
         var timer;
         node.on('input', function (msg) {
             node.status({fill: "yellow", shape: "dot", text: 'ending...'});
-            var server_address = msg.server_address || msg.payload.server_address || 'http://0.0.0.0:4723' || null;
+            var server_address = msg.server_address || msg.payload.server_address  || null;
             if (!server_address)
                 return node.error('server_address id required', msg);
 
