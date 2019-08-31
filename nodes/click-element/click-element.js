@@ -52,58 +52,54 @@ module.exports = function (RED) {
                 if (sended) return;
 
                 node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
-                try {
-                    request.post({
-                        url: url,
-                        json: {}
-                    }, function (e, r, body) {
-                        if (e) {
+                request.post({
+                    url: url,
+                    json: {}
+                }, function (e, r, body) {
+                    if (e) {
 
-                            if (retry_count >= config.retry_limit) {
-                                node.error(e, msg);
-                                node.send([null, msg]);
-                            } else {
-                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                                call();
-                            }
-
-                        } else if (r.statusCode !== 200) {
-                            // node.error(body.value.message, msg);
-                            // node.status({fill: "red", shape: "ring", text: body.value.message});
-                            if (retry_count >= config.retry_limit) {
-                                node.warn(body.value.message, msg);
-                                node.status({fill: "red", shape: "ring", text: body.value.message});
-                                node.send([null, msg]);
-                            } else {
-                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                                call();
-                            }
-
-                        } else if (body.value !== true) {
-                            // node.error(body.value.message, msg);
-                            // node.status({fill: "red", shape: "ring", text: body.value.message});
-
-                            if (retry_count >= config.retry_limit) {
-                                node.warn(body.value.message, msg);
-                                node.status({fill: "red", shape: "ring", text: body.value.message});
-                                node.send([null, msg]);
-                            } else {
-                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                                call();
-                            }
-
+                        if (retry_count >= config.retry_limit) {
+                            node.error(e, msg);
+                            node.send([null, msg]);
                         } else {
-                            // msg.payload = {};
-                            sended = true;
-                            node.status({fill: "green", shape: "ring", text: 'Clicked'});
-                            node.send([msg]);
+                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                            call();
                         }
-                        timerStatus();
-                    });
-                } catch (e) {
-                    node.send([null, msg]);
-                }
-            }
+
+                    } else if (r.statusCode !== 200) {
+                        // node.error(body.value.message, msg);
+                        // node.status({fill: "red", shape: "ring", text: body.value.message});
+                        if (retry_count >= config.retry_limit) {
+                            node.warn(body.value.message, msg);
+                            node.status({fill: "red", shape: "ring", text: body.value.message});
+                            node.send([null, msg]);
+                        } else {
+                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                            call();
+                        }
+
+                    } else if (body.value !== true) {
+                        // node.error(body.value.message, msg);
+                        // node.status({fill: "red", shape: "ring", text: body.value.message});
+
+                        if (retry_count >= config.retry_limit) {
+                            node.warn(body.value.message, msg);
+                            node.status({fill: "red", shape: "ring", text: body.value.message});
+                            node.send([null, msg]);
+                        } else {
+                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                            call();
+                        }
+
+                    } else {
+                        // msg.payload = {};
+                        sended = true;
+                        node.status({fill: "green", shape: "ring", text: 'Clicked'});
+                        node.send([msg]);
+                    }
+                    timerStatus();
+                });
+            };
             call();
 
         });

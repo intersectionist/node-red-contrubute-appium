@@ -27,18 +27,9 @@ module.exports = function (RED) {
 
             config.retry_limit = parseInt(config.retry_limit);
 
-            timeoutTimer(function () {
-                if (!sended) {
-                    sended = true;
-                    node.status({fill: "orange", shape: "dot", text: 'timeout'});
-                    timerStatus();
-                    node.send([null, msg]);
-                }
-            });
+
             var url = server_address + '/wd/hub/session';
             var call = function () {
-
-                if (sended) return;
 
                 request.post({
                     url: url,
@@ -76,7 +67,7 @@ module.exports = function (RED) {
                     }
                     timerStatus();
                 });
-            }
+            };
             call();
 
         });
@@ -92,12 +83,7 @@ module.exports = function (RED) {
             }, 1000);
         };
 
-        var timeoutTimer = function (cb) {
-            timeout_timer = setTimeout(function () {
-                clearTimeout(timeout_timer);
-                cb();
-            }, 240 * 1000);
-        };
+
     }
 
 

@@ -132,7 +132,7 @@ module.exports = function (RED) {
                                 search();
                             }
                         } else {
-                            msg.appium_session_id = body.sessionId;
+                            // msg.appium_session_id = body.sessionId;
                             if (typeof body.value !== "object") {
                                 retry_count++;
                                 if (retry_count >= config.retry_limit) {
