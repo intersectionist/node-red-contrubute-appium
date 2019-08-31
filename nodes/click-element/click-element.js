@@ -10,7 +10,6 @@ module.exports = function (RED) {
         var node = this;
         var retry_count = 0;
         var timer;
-        var sended = false;
 
 
         node.on('input', function (msg) {
@@ -40,8 +39,6 @@ module.exports = function (RED) {
 
 
             var call = function () {
-                if (sended) return;
-
                 node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
                 request.post({
                     url: url,
@@ -84,7 +81,6 @@ module.exports = function (RED) {
 
                     } else {
                         // msg.payload = {};
-                        sended = true;
                         node.status({fill: "green", shape: "ring", text: 'Clicked'});
                         node.send([msg]);
                     }
