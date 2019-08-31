@@ -19,10 +19,17 @@ module.exports = function (RED) {
                 return node.error('Session id required', msg);
 
             if (appium_session_id === null) {
+                node.send([null, msg]);
                 node.error('Session id required', msg);
                 return;
             }
             if (body.value === null) {
+                node.send([null, msg]);
+                node.error('send_key_value required', msg);
+                return;
+            }
+            if (typeof send_key_value !== 'string' || (typeof send_key_value !== 'string' && send_key_value.toString().length === 0)) {
+                node.send([null, msg]);
                 node.error('body.value id required', msg);
                 return;
             }
