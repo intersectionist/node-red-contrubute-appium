@@ -26,26 +26,30 @@ module.exports = function (RED) {
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + element_id + '/click';
 
-            request.post({
-                url: url,
-                json: {}
-            }, function (e, r, body) {
-                if (e) {
-                    node.error(e, msg);
-                    node.status({fill: "red", shape: "ring", text: "e"});
-                } else if (r.statusCode !== 200) {
-                    // node.error(body.value.message, msg);
-                    node.status({fill: "red", shape: "ring", text: body.value.message});
-                } else if (body.value !== true) {
-                    // node.error(body.value.message, msg);
-                    node.status({fill: "red", shape: "ring", text: body.value.message});
-                } else {
-                    // msg.payload = {};
-                    node.status({fill: "green", shape: "ring", text: 'Clicked'});
-                    timerStatus();
-                    node.send(msg);
-                }
-            });
+            try {
+                request.post({
+                    url: url,
+                    json: {}
+                }, function (e, r, body) {
+                    if (e) {
+                        node.error(e, msg);
+                        node.status({fill: "red", shape: "ring", text: "e"});
+                    } else if (r.statusCode !== 200) {
+                        // node.error(body.value.message, msg);
+                        node.status({fill: "red", shape: "ring", text: body.value.message});
+                    } else if (body.value !== true) {
+                        // node.error(body.value.message, msg);
+                        node.status({fill: "red", shape: "ring", text: body.value.message});
+                    } else {
+                        // msg.payload = {};
+                        node.status({fill: "green", shape: "ring", text: 'Clicked'});
+                        timerStatus();
+                        node.send([msg]);
+                    }
+                });
+            } catch (e) {
+                node.send([null, msg]);
+            }
         });
 
         node.on("close", function (done) {
