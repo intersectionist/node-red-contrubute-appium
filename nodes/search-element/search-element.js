@@ -133,20 +133,35 @@ module.exports = function (RED) {
                             }
                         } else {
                             msg.appium_session_id = body.sessionId;
-                            if (config.multiple_search) {
-                                //msg.element_id = body.value.ELEMENT;
-                                msg.payload = body.value;
-                                node.status({fill: "green", shape: "dot", text: 'Founded!'});
-                                node.send([msg]);
+                            if (typeof body.value !== "object") {
+                                retry_count++;
+                                if (retry_count >= config.retry_limit) {
+                                    msg.payload = {
+                                        error: body.value
+                                    };
+                                    node.status({fill: "red", shape: "dot", text: body});
+                                    node.send([null, msg]);
+                                } else {
+                                    node.status({fill: "orange", shape: "dot", text: 'retrying'});
+                                    search();
+                                }
                             } else {
-                                msg.element_id = body.value.ELEMENT;
-                                msg.payload = {
-                                    session_id: body.sessionId,
-                                    element_id: body.value.ELEMENT,
-                                };
-                                node.status({fill: "green", shape: "dot", text: 'Founded!'});
-                                node.send([msg]);
+                                if (config.multiple_search) {
+                                    //msg.element_id = body.value.ELEMENT;
+                                    msg.payload = body.value;
+                                    node.status({fill: "green", shape: "dot", text: 'Founded!'});
+                                    node.send([msg]);
+                                } else {
+                                    msg.element_id = body.value.ELEMENT;
+                                    msg.payload = {
+                                        session_id: body.sessionId,
+                                        element_id: body.value.ELEMENT,
+                                    };
+                                    node.status({fill: "green", shape: "dot", text: 'Founded!'});
+                                    node.send([msg]);
+                                }
                             }
+
 
                         }
                         timerStatus();

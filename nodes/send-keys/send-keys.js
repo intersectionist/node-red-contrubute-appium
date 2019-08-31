@@ -22,6 +22,10 @@ module.exports = function (RED) {
                 node.error('Session id required', msg);
                 return;
             }
+            if (body.value === null) {
+                node.error('body.value id required', msg);
+                return;
+            }
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + elment_id + '/value';
 
