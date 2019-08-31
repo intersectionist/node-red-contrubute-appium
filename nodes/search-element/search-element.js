@@ -66,7 +66,7 @@ module.exports = function (RED) {
             };
 
             var search = function () {
-                node.info('retry search ' + retry_count, msg);
+                node.status({fill: "yellow", shape: "dot", text: 're clicking...'});
                 msg.payload = {
                     retry_count: retry_count
                 };

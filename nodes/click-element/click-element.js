@@ -50,7 +50,7 @@ module.exports = function (RED) {
 
             var call = function () {
                 if (sended) return;
-                node.info('retry search ' + retry_count, msg);
+
                 node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
                 try {
                     request.post({
