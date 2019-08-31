@@ -66,9 +66,6 @@ module.exports = function (RED) {
             };
 
             var search = function () {
-
-                if (sended) return;
-
                 node.error('retry search ' + retry_count, msg);
                 msg.payload = {
                     retry_count: retry_count
