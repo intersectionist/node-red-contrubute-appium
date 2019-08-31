@@ -123,7 +123,7 @@ module.exports = function (RED) {
             timeout_timer = setTimeout(function () {
                 clearTimeout(timeout_timer);
                 cb();
-            }, 10000);
+            }, 10 * 1000);
         };
     }
 

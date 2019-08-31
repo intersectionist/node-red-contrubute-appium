@@ -112,7 +112,7 @@ module.exports = function (RED) {
             timeout_timer = setTimeout(function () {
                 clearTimeout(timeout_timer);
                 cb();
-            }, 10000);
+            }, 13 * 1000);
         };
 
         node.on("close", function (done) {
