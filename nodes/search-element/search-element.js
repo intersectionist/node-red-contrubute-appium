@@ -66,7 +66,7 @@ module.exports = function (RED) {
             };
 
             var search = function () {
-                node.error('retry search ' + retry_count, msg);
+                node.info('retry search ' + retry_count, msg);
                 msg.payload = {
                     retry_count: retry_count
                 };
