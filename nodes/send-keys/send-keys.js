@@ -58,12 +58,10 @@ module.exports = function (RED) {
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + elment_id + '/value';
 
             var call = function () {
-                node.status({fill: "yellow", shape: "dot", text: 'sending keys..'});
 
-                if (sended) {
-                    node.status({});
-                    return;
-                }
+                if (sended) return;
+
+                node.status({fill: "yellow", shape: "dot", text: 'sending keys..'});
 
                 request.post({
                     url: url,
@@ -97,6 +95,8 @@ module.exports = function (RED) {
                     timerStatus();
                 });
             }
+
+            call();
 
 
         });

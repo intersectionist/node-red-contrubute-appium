@@ -15,7 +15,7 @@ module.exports = function (RED) {
 
 
         node.on('input', function (msg) {
-            node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
+
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address)
                 return node.error('server_address id required', msg);
@@ -49,6 +49,9 @@ module.exports = function (RED) {
             });
 
             var call = function () {
+                if (sended) return;
+
+                node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
                 try {
                     request.post({
                         url: url,
@@ -101,6 +104,7 @@ module.exports = function (RED) {
                     node.send([null, msg]);
                 }
             }
+            call();
 
         });
 

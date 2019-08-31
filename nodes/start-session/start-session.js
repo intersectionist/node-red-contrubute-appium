@@ -37,6 +37,9 @@ module.exports = function (RED) {
             });
             var url = server_address + '/wd/hub/session';
             var call = function () {
+
+                if (sended) return;
+
                 request.post({
                     url: url,
                     json: appium_config
@@ -74,6 +77,7 @@ module.exports = function (RED) {
                     timerStatus();
                 });
             }
+            call();
 
         });
 
