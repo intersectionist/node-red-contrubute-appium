@@ -20,10 +20,10 @@ module.exports = function (RED) {
             var appium_config = msg.payload.appium_config || msg.appium_config;
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
 
-            config.retry_limit = 2;
+            config.retry_limit = 1;
 
             if (typeof config.retry_limit === "undefined" || !config.retry_limit)
-                config.retry_limit = 3;
+                config.retry_limit = 1;
 
             config.retry_limit = parseInt(config.retry_limit);
 
@@ -96,7 +96,7 @@ module.exports = function (RED) {
             timeout_timer = setTimeout(function () {
                 clearTimeout(timeout_timer);
                 cb();
-            }, 120 * 1000);
+            }, 240 * 1000);
         };
     }
 
