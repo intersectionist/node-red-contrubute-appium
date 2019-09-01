@@ -7,9 +7,9 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         this.server = RED.nodes.getNode(config.server);
         var node = this;
-        var timer;
-        node.on('input', function (msg) {
 
+        node.on('input', function (msg) {
+            var timer;
             var retry_count = 0;
 
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
@@ -169,6 +169,12 @@ module.exports = function (RED) {
 
 
                     }
+                    var timerStatus = function () {
+                        timer = setTimeout(function () {
+                            clearTimeout(timer);
+                            node.status({});
+                        }, 1000);
+                    };
                     timerStatus();
 
                 });
@@ -182,12 +188,7 @@ module.exports = function (RED) {
         });
 
 
-        var timerStatus = function () {
-            timer = setTimeout(function () {
-                clearTimeout(timer);
-                node.status({});
-            }, 1000);
-        };
+
     }
 
     RED.nodes.registerType("search-element", SearchElementNode);

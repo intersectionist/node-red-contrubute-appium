@@ -8,13 +8,14 @@ module.exports = function (RED) {
 
 
         var node = this;
-        var retry_count = 0;
-        var timer;
-        var timeout_timer;
-        var sended = false;
-
 
         node.on('input', function (msg) {
+
+            var retry_count = 0;
+            var timer;
+            var timeout_timer;
+            var sended = false;
+
 
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address)
@@ -102,25 +103,27 @@ module.exports = function (RED) {
             };
             call();
 
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
+
+            var timeoutTimer = function (cb) {
+                timeout_timer = setTimeout(function () {
+                    clearTimeout(timeout_timer);
+                    cb();
+                }, 10 * 1000);
+            };
+
         });
 
         node.on("close", function (done) {
             done()
         });
 
-        var timerStatus = function () {
-            timer = setTimeout(function () {
-                clearTimeout(timer);
-                node.status({});
-            }, 1000);
-        };
 
-        var timeoutTimer = function (cb) {
-            timeout_timer = setTimeout(function () {
-                clearTimeout(timeout_timer);
-                cb();
-            }, 10 * 1000);
-        };
     }
 
     RED.nodes.registerType("click-element", ClickElementNode);

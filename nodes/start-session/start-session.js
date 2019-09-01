@@ -8,12 +8,13 @@ module.exports = function (RED) {
         var node = this;
         var timer;
 
-        var timeout_timer;
-        var sended = false;
-        var retry_count = 0;
+
 
         node.on('input', function (msg) {
+            var timeout_timer;
 
+            var sended = false;
+            var retry_count = 0;
             var server_address = msg.payload.url || msg.url;
 
             msg.server_address = server_address;
@@ -69,6 +70,12 @@ module.exports = function (RED) {
                 });
             };
             call();
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
 
         });
 
@@ -76,12 +83,7 @@ module.exports = function (RED) {
             done()
         });
 
-        var timerStatus = function () {
-            timer = setTimeout(function () {
-                clearTimeout(timer);
-                node.status({});
-            }, 1000);
-        };
+
 
 
     }

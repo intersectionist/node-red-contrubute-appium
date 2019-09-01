@@ -8,8 +8,9 @@ module.exports = function (RED) {
 
 
         var node = this;
-        var timer;
+
         node.on('input', function (msg) {
+            var timer;
             node.status({fill: "yellow", shape: "dot", text: 'ending...'});
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address) {
@@ -42,18 +43,20 @@ module.exports = function (RED) {
                     node.send([msg]);
                 }
             });
+
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
         });
 
         node.on("close", function (done) {
             done()
         });
 
-        var timerStatus = function () {
-            timer = setTimeout(function () {
-                clearTimeout(timer);
-                node.status({});
-            }, 1000);
-        };
+
     }
 
     RED.nodes.registerType("end-session", EndSessionNode);

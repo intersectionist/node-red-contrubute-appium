@@ -6,11 +6,13 @@ module.exports = function (RED) {
     function SendKeysNode(config) {
         RED.nodes.createNode(this, config);
         this.server = RED.nodes.getNode(config.server);
-        var timer;
-        var timeout_timer;
-        var node = this;
+
+
         node.on('input', function (msg) {
 
+            var timer;
+            var timeout_timer;
+            var node = this;
             var sended = false;
             var retry_count = 0;
 
@@ -94,26 +96,26 @@ module.exports = function (RED) {
                     }
                     timerStatus();
                 });
-            }
+            };
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
+
+            var timeoutTimer = function (cb) {
+                timeout_timer = setTimeout(function () {
+                    clearTimeout(timeout_timer);
+                    cb();
+                }, 13 * 1000);
+            };
 
             call();
 
 
         });
 
-        var timerStatus = function () {
-            timer = setTimeout(function () {
-                clearTimeout(timer);
-                node.status({});
-            }, 1000);
-        };
-
-        var timeoutTimer = function (cb) {
-            timeout_timer = setTimeout(function () {
-                clearTimeout(timeout_timer);
-                cb();
-            }, 13 * 1000);
-        };
 
         node.on("close", function (done) {
             done()
