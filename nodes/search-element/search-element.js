@@ -40,6 +40,13 @@ module.exports = function (RED) {
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/timeouts/implicit_wait';
             node.log('url ' + url, msg);
 
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
+
             var set_implicit_wait = function (cb) {
                 if (implicit_wait === config.implicit_wait) {
                     cb();
@@ -169,12 +176,7 @@ module.exports = function (RED) {
 
 
                     }
-                    var timerStatus = function () {
-                        timer = setTimeout(function () {
-                            clearTimeout(timer);
-                            node.status({});
-                        }, 1000);
-                    };
+
                     timerStatus();
 
                 });

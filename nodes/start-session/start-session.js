@@ -11,7 +11,6 @@ module.exports = function (RED) {
 
 
         node.on('input', function (msg) {
-            var timeout_timer;
 
             var sended = false;
             var retry_count = 0;
@@ -27,6 +26,14 @@ module.exports = function (RED) {
                 config.retry_limit = 1;
 
             config.retry_limit = parseInt(config.retry_limit);
+
+
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
 
 
             var url = server_address + '/wd/hub/session';
@@ -70,12 +77,6 @@ module.exports = function (RED) {
                 });
             };
             call();
-            var timerStatus = function () {
-                timer = setTimeout(function () {
-                    clearTimeout(timer);
-                    node.status({});
-                }, 1000);
-            };
 
         });
 

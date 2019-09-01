@@ -23,6 +23,20 @@ module.exports = function (RED) {
 
             config.retry_limit = parseInt(config.retry_limit);
 
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
+
+            var timeoutTimer = function (cb) {
+                timeout_timer = setTimeout(function () {
+                    clearTimeout(timeout_timer);
+                    cb();
+                }, 13 * 1000);
+            };
+
             timeoutTimer(function () {
                 if (!sended) {
                     sended = true;
@@ -56,6 +70,8 @@ module.exports = function (RED) {
                 node.error('send_key_value required', msg);
                 return;
             }
+
+
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + elment_id + '/value';
 
@@ -97,19 +113,7 @@ module.exports = function (RED) {
                     timerStatus();
                 });
             };
-            var timerStatus = function () {
-                timer = setTimeout(function () {
-                    clearTimeout(timer);
-                    node.status({});
-                }, 1000);
-            };
 
-            var timeoutTimer = function (cb) {
-                timeout_timer = setTimeout(function () {
-                    clearTimeout(timeout_timer);
-                    cb();
-                }, 13 * 1000);
-            };
 
             call();
 

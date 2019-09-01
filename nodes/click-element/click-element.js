@@ -17,6 +17,21 @@ module.exports = function (RED) {
             var sended = false;
 
 
+            var timerStatus = function () {
+                timer = setTimeout(function () {
+                    clearTimeout(timer);
+                    node.status({});
+                }, 1000);
+            };
+
+            var timeoutTimer = function (cb) {
+                timeout_timer = setTimeout(function () {
+                    clearTimeout(timeout_timer);
+                    cb();
+                }, 10 * 1000);
+            };
+
+
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address)
                 return node.error('server_address id required', msg);
@@ -103,19 +118,7 @@ module.exports = function (RED) {
             };
             call();
 
-            var timerStatus = function () {
-                timer = setTimeout(function () {
-                    clearTimeout(timer);
-                    node.status({});
-                }, 1000);
-            };
 
-            var timeoutTimer = function (cb) {
-                timeout_timer = setTimeout(function () {
-                    clearTimeout(timeout_timer);
-                    cb();
-                }, 10 * 1000);
-            };
 
         });
 
