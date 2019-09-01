@@ -65,13 +65,6 @@ module.exports = function (RED) {
                 node.error('send_key_value required', msg);
                 return;
             }
-            if (typeof send_key_value !== 'string' || (typeof send_key_value !== 'string' && send_key_value.toString().length === 0)) {
-                node.send([null, msg]);
-                node.error('send_key_value required', msg);
-                return;
-            }
-
-
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + elment_id + '/value';
 

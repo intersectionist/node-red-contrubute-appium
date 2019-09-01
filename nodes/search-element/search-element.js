@@ -38,7 +38,7 @@ module.exports = function (RED) {
 
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/timeouts/implicit_wait';
-            node.log('url ' + url, msg);
+            // node.log('url ' + url, msg);
 
             var timerStatus = function () {
                 timer = setTimeout(function () {
