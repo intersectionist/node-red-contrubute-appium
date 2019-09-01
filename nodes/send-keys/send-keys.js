@@ -7,12 +7,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         this.server = RED.nodes.getNode(config.server);
 
-
+        var node = this;
         node.on('input', function (msg) {
 
             var timer;
             var timeout_timer;
-            var node = this;
+
             var sended = false;
             var retry_count = 0;
 
