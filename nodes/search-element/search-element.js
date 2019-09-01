@@ -166,7 +166,7 @@ module.exports = function (RED) {
                             } else {
                                 msg.element_id = body.value.ELEMENT;
                                 msg.payload = {
-                                    session_id: body.sessionId,
+                                    appium_session_id: body.sessionId,
                                     element_id: body.value.ELEMENT,
                                 };
                                 node.status({fill: "green", shape: "dot", text: 'Founded!'});

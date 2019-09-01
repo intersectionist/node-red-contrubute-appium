@@ -68,7 +68,7 @@ module.exports = function (RED) {
                         msg.appium_session_id = body.sessionId;
                         msg.server_address = server_address;
                         msg.payload = {
-                            session_id: body.sessionId
+                            appium_session_id: body.sessionId
                         };
                         node.status({fill: "green", shape: "dot", text: 'session created'});
                         node.send(msg);

@@ -33,8 +33,10 @@ module.exports = function (RED) {
                 if (e) {
                     node.error(e, msg);
                     node.status({fill: "red", shape: "ring", text: "e"});
+                    node.send([null, msg]);
                 } else if (r.statusCode !== 200) {
                     node.error(body.error, msg);
+                    node.send([null, msg]);
                     node.status({fill: "red", shape: "ring", text: body.error});
                 } else {
                     // msg.payload = {};
