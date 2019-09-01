@@ -14,6 +14,7 @@ module.exports = function (RED) {
 
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
             var server_address = msg.server_address || msg.payload.server_address || null;
+            var implicit_wait = msg.implicit_wait || msg.payload.implicit_wait || null;
 
             if (!server_address)
                 return node.error('server_address required', msg);
@@ -40,29 +41,34 @@ module.exports = function (RED) {
             node.log('url ' + url, msg);
 
             var set_implicit_wait = function (cb) {
-                request.post({
-                    url: url,
-                    json: {
-                        "ms": config.implicit_wait
-                    }
-                }, function (e, r, body) {
-                    if (e) {
-                        node.status({fill: "red", shape: "dot", text: e.message});
-                        node.error(e.message, msg);
-                        node.send([null, msg]);
+                if (implicit_wait === config.implicit_wait) {
+                    cb();
+                } else {
+                    request.post({
+                        url: url,
+                        json: {
+                            "ms": config.implicit_wait
+                        }
+                    }, function (e, r, body) {
+                        if (e) {
+                            node.status({fill: "red", shape: "dot", text: e.message});
+                            node.error(e.message, msg);
+                            node.send([null, msg]);
 
-                        timerStatus();
-                    } else if (r.statusCode !== 200) {
-                        node.status({fill: "red", shape: "dot", text: body});
-                        node.error(body, msg);
-                        node.send([null, msg]);
+                            timerStatus();
+                        } else if (r.statusCode !== 200) {
+                            node.status({fill: "red", shape: "dot", text: body});
+                            node.error(body, msg);
+                            node.send([null, msg]);
 
-                        timerStatus();
-                    } else {
-                        // node.warn('Set timeout to ' + config.implicit_wait, msg);
-                        cb();
-                    }
-                });
+                            timerStatus();
+                        } else {
+                            // node.warn('Set timeout to ' + config.implicit_wait, msg);
+                            cb();
+                        }
+                    });
+                }
+
             };
 
             var search = function () {
