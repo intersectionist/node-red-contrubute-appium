@@ -30,20 +30,9 @@ module.exports = function (RED) {
             request.delete({
                 url: url
             }, function (e, r, body) {
-                if (e) {
-                    node.error(e, msg);
-                    node.status({fill: "red", shape: "ring", text: "e"});
-                    node.send([null, msg]);
-                } else if (r.statusCode !== 200) {
-                    node.error(body.error, msg);
-                    node.send([null, msg]);
-                    node.status({fill: "red", shape: "ring", text: body.error});
-                } else {
-                    // msg.payload = {};
-                    node.status({fill: "green", shape: "ring", text: 'Session ended'});
-                    timerStatus();
-                    node.send([msg]);
-                }
+                node.status({fill: "green", shape: "ring", text: 'Session ended'});
+                timerStatus();
+                node.send([msg]);
             });
 
             var timerStatus = function () {
