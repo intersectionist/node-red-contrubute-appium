@@ -12,24 +12,7 @@ module.exports = function (RED) {
         node.on('input', function (msg) {
 
             var retry_count = 0;
-            var timer;
-            var timeout_timer;
             var sended = false;
-
-
-            var timerStatus = function () {
-                timer = setTimeout(function () {
-                    clearTimeout(timer);
-                    node.status({});
-                }, 1000);
-            };
-
-            var timeoutTimer = function (cb) {
-                timeout_timer = setTimeout(function () {
-                    clearTimeout(timeout_timer);
-                    cb();
-                }, 10 * 1000);
-            };
 
 
             var server_address = msg.server_address || msg.payload.server_address || null;
@@ -55,14 +38,7 @@ module.exports = function (RED) {
 
             config.retry_limit = parseInt(config.retry_limit);
 
-            timeoutTimer(function () {
-                if (!sended) {
-                    sended = true;
-                    node.status({fill: "orange", shape: "dot", text: 'timeout'});
-                    timerStatus();
-                    node.send([null, msg]);
-                }
-            });
+
 
             var call = function () {
                 if (sended) return;
@@ -113,7 +89,6 @@ module.exports = function (RED) {
                         node.status({fill: "green", shape: "ring", text: 'Clicked'});
                         node.send([msg]);
                     }
-                    timerStatus();
                 });
             };
             call();
