@@ -20,21 +20,6 @@ module.exports = function (RED) {
             var appium_config = msg.payload.appium_config || msg.appium_config;
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
 
-            config.retry_limit = 1;
-
-            if (typeof config.retry_limit === "undefined" || !config.retry_limit)
-                config.retry_limit = 1;
-
-            config.retry_limit = parseInt(config.retry_limit);
-
-
-            var timerStatus = function () {
-                timer = setTimeout(function () {
-                    clearTimeout(timer);
-                    node.status({});
-                }, 1000);
-            };
-
 
             var url = server_address + '/wd/hub/session';
             var call = function () {
@@ -44,24 +29,13 @@ module.exports = function (RED) {
                     json: appium_config
                 }, function (e, r, body) {
                     if (e) {
-                        if (retry_count >= config.retry_limit) {
-                            node.error(e, msg);
-                            node.send([null, msg]);
-                            node.status({fill: "red", shape: "dot", text: e});
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            call();
-                        }
+                        node.error(e, msg);
+                        node.send([null, msg]);
+                        node.status({fill: "red", shape: "dot", text: e});
                     } else if (r.statusCode !== 200) {
-                        if (retry_count >= config.retry_limit) {
-                            node.warn(body.value.message, msg);
-                            node.status({fill: "red", shape: "ring", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            call();
-                        }
-
+                        node.warn(body.value.message, msg);
+                        node.status({fill: "red", shape: "ring", text: body.value.message});
+                        node.send([null, msg]);
 
                     } else {
                         sended = true;
@@ -73,7 +47,7 @@ module.exports = function (RED) {
                         node.status({fill: "green", shape: "dot", text: 'session created'});
                         node.send(msg);
                     }
-                    timerStatus();
+
                 });
             };
             call();
