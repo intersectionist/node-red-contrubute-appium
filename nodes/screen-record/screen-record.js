@@ -3,7 +3,7 @@ module.exports = function (RED) {
 
     var request = require('request');
 
-    function StartSessionNode(config) {
+    function ScreenRecordNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         var timer;
@@ -21,6 +21,7 @@ module.exports = function (RED) {
 
 
             var url = server_address + '/wd/hub/session';
+            var url = server_address + '/wd/hub/session/' + appium_session_id + '/appium/start_recording_screen';
             var call = function () {
 
                 request.post({
@@ -43,7 +44,7 @@ module.exports = function (RED) {
                         msg.payload = {
                             appium_session_id: body.sessionId
                         };
-                        node.status({fill: "green", shape: "dot", text: 'session created'});
+                        node.status({fill: "green", shape: "dot", text: 'screen record started'});
                         node.send(msg);
                     }
 
@@ -63,6 +64,6 @@ module.exports = function (RED) {
     }
 
 
-    RED.nodes.registerType("start-session", StartSessionNode);
+    RED.nodes.registerType("screen-record", ScreenRecordNode);
 
 };

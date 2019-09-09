@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    RED.nodes.registerType('screen-record', {
+        category: 'Appium',
+        color: '#a9cf80',
+        defaults: {
+            name: {value: ""},
+        },
+        inputs: 1,
+        outputs: 2,
+        icon: "font-awesome/fa-play",
+        label: function () {
+            return this.name || "Start Screen Record";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="screen-record">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="screen-record">
+
+</script>
