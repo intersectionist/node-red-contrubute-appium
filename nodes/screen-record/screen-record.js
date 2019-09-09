@@ -13,14 +13,15 @@ module.exports = function (RED) {
         node.on('input', function (msg) {
 
             var sended = false;
-            var server_address = msg.payload.url || msg.url;
+            var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
+            var server_address = msg.server_address || msg.payload.server_address || null;
 
             msg.server_address = server_address;
             var appium_config = msg.payload.appium_config || msg.appium_config;
             node.status({fill: "yellow", shape: "dot", text: 'session create request sending..'});
 
 
-            var url = server_address + '/wd/hub/session';
+
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/appium/start_recording_screen';
             var call = function () {
 
