@@ -17,6 +17,7 @@
       "go-back": "nodes/back/back.js",
       "set-location": "nodes/set-location/set-location.js",
       "screen-record": "nodes/screen-record/screen-record.js",
+      "screen-shot": "nodes/screen-shot/screen-shot.js",
       "start-session": "nodes/start-session/start-session.js"
     }
   },
