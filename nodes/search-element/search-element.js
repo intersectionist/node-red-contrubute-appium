@@ -16,10 +16,10 @@ module.exports = function (RED) {
             var implicit_wait = msg.implicit_wait || msg.payload.implicit_wait || null;
 
             if (!server_address)
-                return node.error('server_address required', msg);
+                return node.warn('server_address required', msg);
 
             if (appium_session_id === null) {
-                node.error('Session id required', msg);
+                node.warn('Session id required', msg);
                 return;
             }
 
@@ -54,14 +54,14 @@ module.exports = function (RED) {
                         }
                     }, function (e, r, body) {
                         if (e) {
-                            node.status({fill: "red", shape: "dot", text: e.message});
-                            node.error(e.message, msg);
+                            // node.status({fill: "red", shape: "dot", text: e.message});
+                            // node.error(e.message, msg);
                             node.send([null, msg]);
 
                             timerStatus();
                         } else if (r.statusCode !== 200) {
-                            node.status({fill: "red", shape: "dot", text: body});
-                            node.error(body, msg);
+                            // node.status({fill: "red", shape: "dot", text: body});
+                            // node.error(body, msg);
                             node.send([null, msg]);
 
                             timerStatus();
