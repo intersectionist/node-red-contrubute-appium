@@ -15,18 +15,18 @@ module.exports = function (RED) {
 
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address) {
-                node.send([null, null]);
+                return node.send([null, null]);
             }
 
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
             if (!appium_session_id) {
-                node.send([null, null]);
+                return node.send([null, null]);
             }
 
 
             var element_id = msg.element_id || msg.payload.element_id || null;
             if (!element_id) {
-                node.send([null, null]);
+                return node.send([null, null]);
             }
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + element_id + '/click';
