@@ -50,38 +50,23 @@ module.exports = function (RED) {
                 }, function (e, r, body) {
                     if (e) {
 
-                        if (retry_count >= config.retry_limit) {
-                            node.error(e, msg);
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            call();
-                        }
+                        node.error(e, msg);
+                        node.send([null, msg]);
 
                     } else if (r.statusCode !== 200) {
                         // node.error(body.value.message, msg);
                         // node.status({fill: "red", shape: "ring", text: body.value.message});
-                        if (retry_count >= config.retry_limit) {
-                            node.warn(body.value.message, msg);
-                            node.status({fill: "red", shape: "ring", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            call();
-                        }
+                        node.warn(body.value.message, msg);
+                        node.status({fill: "red", shape: "ring", text: body.value.message});
+                        node.send([null, msg]);
 
                     } else if (body.value !== true) {
                         // node.error(body.value.message, msg);
                         // node.status({fill: "red", shape: "ring", text: body.value.message});
 
-                        if (retry_count >= config.retry_limit) {
-                            node.warn(body.value.message, msg);
-                            node.status({fill: "red", shape: "ring", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            call();
-                        }
+                        node.warn(body.value.message, msg);
+                        node.status({fill: "red", shape: "ring", text: body.value.message});
+                        node.send([null, msg]);
 
                     } else {
                         // msg.payload = {};
