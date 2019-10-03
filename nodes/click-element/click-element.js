@@ -10,8 +10,6 @@ module.exports = function (RED) {
         var node = this;
 
         node.on('input', function (msg) {
-
-            var retry_count = 0;
             var sended = false;
 
 
@@ -29,16 +27,6 @@ module.exports = function (RED) {
                 return node.error('element_id id required', msg);
 
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + element_id + '/click';
-
-
-            config.retry_limit = 2;
-
-            if (typeof config.retry_limit === "undefined" || !config.retry_limit)
-                config.retry_limit = 3;
-
-            config.retry_limit = parseInt(config.retry_limit);
-
-
 
             var call = function () {
                 if (sended) return;

@@ -10,7 +10,6 @@ module.exports = function (RED) {
 
         node.on('input', function (msg) {
             var timer;
-            var retry_count = 0;
 
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
             var server_address = msg.server_address || msg.payload.server_address || null;
@@ -24,15 +23,12 @@ module.exports = function (RED) {
                 return;
             }
 
-            if (typeof config.retry_limit === "undefined" || !config.retry_limit)
-                config.retry_limit = 3;
 
 
             if (typeof config.implicit_wait === "undefined" || !config.implicit_wait)
                 config.implicit_wait = 1000;
 
 
-            config.retry_limit = parseInt(config.retry_limit);
             config.implicit_wait = parseInt(config.implicit_wait);
             node.status({fill: "yellow", shape: "dot", text: 'Searching...'});
 
@@ -80,9 +76,7 @@ module.exports = function (RED) {
 
             var search = function () {
                 node.status({fill: "yellow", shape: "dot", text: 're finding...'});
-                msg.payload = {
-                    retry_count: retry_count
-                };
+                msg.payload = {  };
 
                 var endpoint = '/element';
 
@@ -101,62 +95,37 @@ module.exports = function (RED) {
                 }, function (e, r, body) {
                     if (e) {
                         //node.error(e, msg);
-                        retry_count++;
+
                         msg.payload = {
-                            error: e,
-                            retry_count: retry_count
+                            error: e
                         };
 
                         node.error(e.message, msg);
-                        if (retry_count >= config.retry_limit) {
-                            node.status({fill: "red", shape: "dot", text: e.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            search();
-                        }
+                        node.status({fill: "red", shape: "dot", text: e.message});
+                        node.send([null, msg]);
                     } else if (r.statusCode !== 200) {
                         // node.warn(body.value.message, msg);
                         msg.payload = {
                             error: body.value.message
                         };
-                        // node.log('response: ' + body.value.message + ', status_code:' + r.statusCode, msg);
-                        retry_count++;
-                        if (retry_count >= config.retry_limit) {
-                            node.status({fill: "red", shape: "dot", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            search();
-                        }
+                        node.status({fill: "red", shape: "dot", text: body.value.message});
+                        node.send([null, msg]);
                     } else if (body.status !== 0) {
                         //  node.warn(body.value.message, msg);
                         msg.payload = {
                             error: body.value.message
                         };
 
-                        retry_count++;
-                        if (retry_count >= config.retry_limit) {
-                            node.status({fill: "red", shape: "dot", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                            search();
-                        }
+                        node.status({fill: "red", shape: "dot", text: body.value.message});
+                        node.send([null, msg]);
                     } else {
                         // msg.appium_session_id = body.sessionId;
                         if (typeof body.value !== "object") {
-                            retry_count++;
-                            if (retry_count >= config.retry_limit) {
-                                msg.payload = {
-                                    error: body.value
-                                };
-                                node.status({fill: "red", shape: "dot", text: body});
-                                node.send([null, msg]);
-                            } else {
-                                node.status({fill: "orange", shape: "dot", text: 'retrying'});
-                                search();
-                            }
+                            msg.payload = {
+                                error: body.value
+                            };
+                            node.status({fill: "red", shape: "dot", text: body});
+                            node.send([null, msg]);
                         } else {
                             if (config.multiple_search) {
                                 //msg.element_id = body.value.ELEMENT;
