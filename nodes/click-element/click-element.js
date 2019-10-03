@@ -42,9 +42,9 @@ module.exports = function (RED) {
                     }, function (e, r, body) {
 
 
-                        console.log('e',e)
-                        console.log('r',r)
-                        console.log('body',body)
+                        console.log('e',typeof e)
+                        console.log('r',r.statusCode)
+                        console.log('body',body.value)
 
                         if (e) {
                             // node.error(e, msg);
