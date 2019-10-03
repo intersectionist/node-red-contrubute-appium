@@ -45,22 +45,22 @@ module.exports = function (RED) {
                         } else if (r.statusCode !== 200) {
                             // node.error(body.value.message, msg);
                             // node.status({fill: "red", shape: "ring", text: body.value.message});
-                            node.warn(body.value.message, msg);
-                            node.status({fill: "red", shape: "ring", text: body.value.message});
+                            // node.warn(body.value.message, msg);
+                            // node.status({fill: "red", shape: "ring", text: body.value.message});
                             node.send([null, msg]);
 
                         } else if (body.value !== true) {
                             // node.error(body.value.message, msg);
                             // node.status({fill: "red", shape: "ring", text: body.value.message});
 
-                            node.warn(body.value.message, msg);
-                            node.status({fill: "red", shape: "ring", text: body.value.message});
+                            // node.warn(body.value.message, msg);
+                            // node.status({fill: "red", shape: "ring", text: body.value.message});
                             node.send([null, msg]);
 
                         } else {
                             // msg.payload = {};
                             sended = true;
-                            node.status({fill: "green", shape: "ring", text: 'Clicked'});
+                            // node.status({fill: "green", shape: "ring", text: 'Clicked'});
                             node.send([msg]);
                         }
                     });
