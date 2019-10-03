@@ -65,7 +65,7 @@ module.exports = function (RED) {
                         }
                     });
                 }catch (e) {
-
+                    node.send([null, e]);
                 }
             };
             call();
