@@ -10,8 +10,6 @@ module.exports = function (RED) {
         var node = this;
 
         node.on('input', function (msg) {
-            var sended = false;
-
 
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address) {
@@ -32,7 +30,7 @@ module.exports = function (RED) {
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/element/' + element_id + '/click';
 
             var call = function () {
-                if (sended) return;
+
 
                 node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
                 try {
@@ -62,9 +60,8 @@ module.exports = function (RED) {
 
                         } else {
                             // msg.payload = {};
-                            sended = true;
                             // node.status({fill: "green", shape: "ring", text: 'Clicked'});
-                            node.send([msg]);
+                            node.send(msg);
                         }
                     });
                     node.status({fill: "green", shape: "dot", text: 'clicked'});
