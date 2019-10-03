@@ -40,31 +40,12 @@ module.exports = function (RED) {
                         url: url,
                         json: {}
                     }, function (e, r, body) {
-
-
-                        console.log('e',typeof e)
-                        console.log('r',r.statusCode)
-                        console.log('body',body.value)
-
-                        if (e) {
-                            // node.error(e, msg);
-                            node.send([null, msg]);
-
-                        } else if (r.statusCode !== 200) {
+                        if (!r.statusCode || r.statusCode !== 200) {
                             // node.error(body.value.message, msg);
                             // node.status({fill: "red", shape: "ring", text: body.value.message});
                             // node.warn(body.value.message, msg);
                             // node.status({fill: "red", shape: "ring", text: body.value.message});
                             node.send([null, msg]);
-
-                        } else if (body.value !== true) {
-                            // node.error(body.value.message, msg);
-                            // node.status({fill: "red", shape: "ring", text: body.value.message});
-
-                            // node.warn(body.value.message, msg);
-                            // node.status({fill: "red", shape: "ring", text: body.value.message});
-                            node.send([null, msg]);
-
                         } else {
                             // msg.payload = {};
                             // node.status({fill: "green", shape: "ring", text: 'Clicked'});
