@@ -100,15 +100,15 @@ module.exports = function (RED) {
                             error: e
                         };
 
-                        node.error(e.message, msg);
-                        node.status({fill: "red", shape: "dot", text: e.message});
+                        //node.error(e.message, msg);
+                        //node.status({fill: "red", shape: "dot", text: e.message});
                         node.send([null, msg]);
                     } else if (r.statusCode !== 200) {
                         // node.warn(body.value.message, msg);
                         msg.payload = {
                             error: body.value.message
                         };
-                        node.status({fill: "red", shape: "dot", text: body.value.message});
+                        //node.status({fill: "red", shape: "dot", text: body.value.message});
                         node.send([null, msg]);
                     } else if (body.status !== 0) {
                         //  node.warn(body.value.message, msg);
@@ -116,7 +116,7 @@ module.exports = function (RED) {
                             error: body.value.message
                         };
 
-                        node.status({fill: "red", shape: "dot", text: body.value.message});
+                        //node.status({fill: "red", shape: "dot", text: body.value.message});
                         node.send([null, msg]);
                     } else {
                         // msg.appium_session_id = body.sessionId;
@@ -124,13 +124,13 @@ module.exports = function (RED) {
                             msg.payload = {
                                 error: body.value
                             };
-                            node.status({fill: "red", shape: "dot", text: body});
+                            //node.status({fill: "red", shape: "dot", text: body});
                             node.send([null, msg]);
                         } else {
                             if (config.multiple_search) {
                                 //msg.element_id = body.value.ELEMENT;
                                 msg.payload = body.value;
-                                node.status({fill: "green", shape: "dot", text: 'Founded!'});
+                                //node.status({fill: "green", shape: "dot", text: 'Founded!'});
                                 node.send([msg]);
                             } else {
                                 msg.element_id = body.value.ELEMENT;
