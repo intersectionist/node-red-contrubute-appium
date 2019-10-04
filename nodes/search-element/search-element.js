@@ -15,14 +15,16 @@ module.exports = function (RED) {
             var server_address = msg.server_address || msg.payload.server_address || null;
             var implicit_wait = msg.implicit_wait || msg.payload.implicit_wait || null;
 
-            if (!server_address)
-                return node.warn('server_address required', msg);
+            if (!server_address) {
+                node.warn('server_address required', msg);
+                return;
+            }
+
 
             if (appium_session_id === null) {
                 node.warn('Session id required', msg);
                 return;
             }
-
 
 
             if (typeof config.implicit_wait === "undefined" || !config.implicit_wait)
@@ -32,9 +34,7 @@ module.exports = function (RED) {
             config.implicit_wait = parseInt(config.implicit_wait);
             node.status({fill: "yellow", shape: "dot", text: 'Searching...'});
 
-
             var url = server_address + '/wd/hub/session/' + appium_session_id + '/timeouts/implicit_wait';
-            // node.log('url ' + url, msg);
 
             var timerStatus = function () {
                 timer = setTimeout(function () {
@@ -53,30 +53,20 @@ module.exports = function (RED) {
                             "ms": config.implicit_wait
                         }
                     }, function (e, r, body) {
-                        if (e) {
-                            // node.status({fill: "red", shape: "dot", text: e.message});
-                            // node.error(e.message, msg);
-                            node.send([null, msg]);
-
-                            timerStatus();
-                        } else if (r.statusCode !== 200) {
-                            // node.status({fill: "red", shape: "dot", text: body});
-                            // node.error(body, msg);
+                        if (!r.statusCode || r.statusCode !== 200) {
                             node.send([null, msg]);
 
                             timerStatus();
                         } else {
-                            // node.warn('Set timeout to ' + config.implicit_wait, msg);
                             cb();
                         }
                     });
                 }
-
             };
 
             var search = function () {
                 node.status({fill: "yellow", shape: "dot", text: 're finding...'});
-                msg.payload = {  };
+                msg.payload = {};
 
                 var endpoint = '/element';
 
@@ -85,7 +75,6 @@ module.exports = function (RED) {
                 }
 
                 var url = server_address + '/wd/hub/session/' + appium_session_id + endpoint;
-                // node.log('url ' + url, msg);
                 request.post({
                     url: url,
                     json: {
@@ -93,44 +82,16 @@ module.exports = function (RED) {
                         "value": 'new UiSelector().' + config.selector_type + '("' + config.selector_value + '")'
                     }
                 }, function (e, r, body) {
-                    if (e) {
-                        //node.error(e, msg);
+                    if (r.statusCode !== 200) {
 
-                        msg.payload = {
-                            error: e
-                        };
-
-                        //node.error(e.message, msg);
-                        //node.status({fill: "red", shape: "dot", text: e.message});
-                        node.send([null, msg]);
-                    } else if (r.statusCode !== 200) {
-                        // node.warn(body.value.message, msg);
-                        msg.payload = {
-                            error: body.value.message
-                        };
-                        //node.status({fill: "red", shape: "dot", text: body.value.message});
-                        node.send([null, msg]);
-                    } else if (body.status !== 0) {
-                        //  node.warn(body.value.message, msg);
-                        msg.payload = {
-                            error: body.value.message
-                        };
-
-                        //node.status({fill: "red", shape: "dot", text: body.value.message});
-                        node.send([null, msg]);
-                    } else {
-                        // msg.appium_session_id = body.sessionId;
                         if (typeof body.value !== "object") {
                             msg.payload = {
                                 error: body.value
                             };
-                            //node.status({fill: "red", shape: "dot", text: body});
                             node.send([null, msg]);
                         } else {
                             if (config.multiple_search) {
-                                //msg.element_id = body.value.ELEMENT;
                                 msg.payload = body.value;
-                                //node.status({fill: "green", shape: "dot", text: 'Founded!'});
                                 node.send([msg]);
                             } else {
                                 msg.element_id = body.value.ELEMENT;
@@ -142,8 +103,11 @@ module.exports = function (RED) {
                                 node.send([msg]);
                             }
                         }
-
-
+                    } else {
+                        msg.payload = {
+                            error: body
+                        };
+                        node.send([null, msg]);
                     }
 
                     timerStatus();
@@ -157,7 +121,6 @@ module.exports = function (RED) {
         node.on("close", function (done) {
             done()
         });
-
 
 
     }

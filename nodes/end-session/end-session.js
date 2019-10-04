@@ -15,13 +15,13 @@ module.exports = function (RED) {
             var server_address = msg.server_address || msg.payload.server_address || null;
             if (!server_address) {
                 node.send([null, msg]);
-                return node.error('server_address id required', msg);
+                return node.warn('server_address id required', msg);
             }
 
             var appium_session_id = msg.appium_session_id || msg.payload.appium_session_id || null;
             if (!appium_session_id) {
                 node.send([null, msg]);
-                return node.error('appium_session_id id required', msg);
+                return node.warn('appium_session_id id required', msg);
             }
 
 
@@ -30,9 +30,16 @@ module.exports = function (RED) {
             request.delete({
                 url: url
             }, function (e, r, body) {
-                node.status({fill: "green", shape: "ring", text: 'Session ended'});
-                timerStatus();
-                node.send([msg]);
+                if (r.statusCode && r.statusCode !== 200) {
+                    node.status({fill: "green", shape: "ring", text: 'Session ended'});
+                    timerStatus();
+                    node.send([msg]);
+                } else {
+                    node.status({fill: "red", shape: "ring", text: 'Session not ended'});
+                    timerStatus();
+                    node.send([null, msg]);
+                }
+
             });
 
             var timerStatus = function () {
