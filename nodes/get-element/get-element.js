@@ -35,28 +35,23 @@ module.exports = function (RED) {
                 console.log(server_address)
 
                 node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
-                try {
-                    request.post({
-                        url: url,
-                        json: {}
-                    }, function (e, r, body) {
-                        if (!r.statusCode || r.statusCode !== 200) {
-                            // node.error(body.value.message, msg);
-                            // node.status({fill: "red", shape: "ring", text: body.value.message});
-                            // node.warn(body.value.message, msg);
-                            // node.status({fill: "red", shape: "ring", text: body.value.message});
-                            node.send([null, msg]);
-                        } else {
-                            msg.payload = body;
-                            // node.status({fill: "green", shape: "ring", text: 'Clicked'});
-                            node.send([msg]);
-                        }
-                    });
-                    node.status({fill: "green", shape: "dot", text: 'clicked'});
-                } catch (e) {
-                    node.status({fill: "yellow", shape: "dot", text: 'error'});
-                    node.send([null, e]);
-                }
+                request.post({
+                    url: url,
+                    json: {}
+                }, function (e, r, body) {
+                    if (!r.statusCode || r.statusCode !== 200) {
+                        // node.error(body.value.message, msg);
+                        // node.status({fill: "red", shape: "ring", text: body.value.message});
+                        // node.warn(body.value.message, msg);
+                        // node.status({fill: "red", shape: "ring", text: body.value.message});
+                        node.send([null, msg]);
+                    } else {
+                        msg.payload = body.value;
+                        // node.status({fill: "green", shape: "ring", text: 'Clicked'});
+                        node.send([msg]);
+                    }
+                });
+                node.status({fill: "green", shape: "dot", text: 'clicked'});
             };
             call();
 
