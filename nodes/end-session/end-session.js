@@ -33,12 +33,12 @@ module.exports = function (RED) {
                 if (r.statusCode && r.statusCode !== 200) {
                     node.status({fill: "green", shape: "ring", text: 'Session ended'});
                     timerStatus();
-                    node.send([msg]);
+                    node.send([null, msg]);
                 } else {
                     node.status({fill: "red", shape: "ring", text: 'Session not ended'});
                     timerStatus();
                     msg.payload = body;
-                    node.send([null, msg]);
+                    node.send([msg]);
                 }
 
             });

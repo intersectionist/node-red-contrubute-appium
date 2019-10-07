@@ -83,29 +83,24 @@ module.exports = function (RED) {
                     }
                 }, function (e, r, body) {
                     if (r.statusCode !== 200) {
-
-                        if (typeof body.value !== "object") {
-                            msg.payload = {
-                                error: body.value
-                            };
-                            node.send([null, msg]);
-                        } else {
-                            if (config.multiple_search) {
-                                msg.payload = body.value;
-                                node.send([msg]);
-                            } else {
-                                msg.element_id = body.value.ELEMENT;
-                                msg.payload = {
-                                    appium_session_id: body.sessionId,
-                                    element_id: body.value.ELEMENT,
-                                };
-                                node.status({fill: "green", shape: "dot", text: 'Founded!'});
-                                node.send([msg]);
-                            }
-                        }
-                    } else {
-                        msg.payload = body;
+                        msg.payload = {
+                            error: body
+                        };
                         node.send([null, msg]);
+
+                    } else {
+                        if (config.multiple_search) {
+                            msg.payload = body.value;
+                            node.send([msg]);
+                        } else {
+                            msg.element_id = body.value.ELEMENT;
+                            msg.payload = {
+                                appium_session_id: body.sessionId,
+                                element_id: body.value.ELEMENT,
+                            };
+                            node.status({fill: "green", shape: "dot", text: 'Founded!'});
+                            node.send([msg]);
+                        }
                     }
 
                     timerStatus();
