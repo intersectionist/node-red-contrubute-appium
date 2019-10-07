@@ -23,31 +23,36 @@ module.exports = function (RED) {
             var url = server_address + '/wd/hub/session';
             var call = function () {
 
-                request.post({
-                    url: url,
-                    json: appium_config
-                }, function (e, r, body) {
-                    if (e) {
-                        node.error(e, msg);
-                        node.send([null, msg]);
-                        node.status({fill: "red", shape: "dot", text: e});
-                    } else if (r.statusCode !== 200) {
-                        node.warn(body.value.message, msg);
-                        node.status({fill: "red", shape: "ring", text: body.value.message});
-                        node.send([null, msg]);
+                try {
+                    request.post({
+                        url: url,
+                        json: appium_config
+                    }, function (e, r, body) {
+                        if (e) {
+                            node.error(e, msg);
+                            node.send([null, msg]);
+                            node.status({fill: "red", shape: "dot", text: e});
+                        } else if (r.statusCode !== 200) {
+                            node.warn(body.value.message, msg);
+                            node.status({fill: "red", shape: "ring", text: body.value.message});
+                            node.send([null, msg]);
 
-                    } else {
-                        sended = true;
-                        msg.appium_session_id = body.sessionId;
-                        msg.server_address = server_address;
-                        msg.payload = {
-                            appium_session_id: body.sessionId
-                        };
-                        node.status({fill: "green", shape: "dot", text: 'session created'});
-                        node.send(msg);
-                    }
+                        } else {
+                            sended = true;
+                            msg.appium_session_id = body.sessionId;
+                            msg.server_address = server_address;
+                            msg.payload = {
+                                appium_session_id: body.sessionId
+                            };
+                            node.status({fill: "green", shape: "dot", text: 'session created'});
+                            node.send([msg]);
+                        }
 
-                });
+                    });
+                }catch (e) {
+                    node.status({fill: "red", shape: "dot", text: e});
+                }
+
             };
             call();
 

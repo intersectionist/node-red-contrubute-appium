@@ -104,9 +104,7 @@ module.exports = function (RED) {
                             }
                         }
                     } else {
-                        msg.payload = {
-                            error: body
-                        };
+                        msg.payload = body;
                         node.send([null, msg]);
                     }
 

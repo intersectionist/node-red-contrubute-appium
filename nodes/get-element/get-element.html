@@ -1,0 +1,46 @@
+<script type="text/javascript">
+    RED.nodes.registerType('get-element', {
+        category: 'Appium',
+        color: '#cfcf80',
+        defaults: {
+            name: {value: ""},
+            selector_type: {value: ""},
+        },
+        inputs: 1,
+        outputs: 2,
+        icon: "font-awesome/fa-search",
+        label: function () {
+            return this.name || this.selector_type + '( ' + this.selector_value + ' )' || "Search element";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="search-element">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-selector_type"><i class="icon-folder-close"></i> Selector Type</label>
+        <select id="node-input-selector_type">
+            <option value="" disabled></option>
+            <option value="text">text</option>
+            <option value="name">name</option>
+            <option value="selected">selected</option>
+            <option value="enabled">enabled</option>
+            <option value="displayed">displayed</option>
+            <option value="location">location</option>
+            <option value="size">size</option>
+            <option value="rect">rect</option>
+            <option value="location_in_view">location_in_view</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="get-element">
+    <p>A simple node that converts the message payloads into all lower-case characters</p>
+
+
+
+</script>
