@@ -31,19 +31,12 @@ module.exports = function (RED) {
 
             var call = function () {
 
-
-                console.log(server_address)
-
                 node.status({fill: "yellow", shape: "dot", text: 'getting...'});
-                request.post({
-                    url: url,
-                    json: {}
+                request.get({
+                    url: url
                 }, function (e, r, body) {
                     if (!r.statusCode || r.statusCode !== 200) {
-                        // node.error(body.value.message, msg);
-                        // node.status({fill: "red", shape: "ring", text: body.value.message});
-                        // node.warn(body.value.message, msg);
-                        // node.status({fill: "red", shape: "ring", text: body.value.message});
+                        node.status({fill: "red", shape: "dot", text: 'error'});
                         node.send([null, msg]);
                     } else {
                         msg.payload = body.value;
