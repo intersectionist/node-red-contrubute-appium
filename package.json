@@ -12,6 +12,7 @@
     "nodes": {
       "search-element": "nodes/search-element/search-element.js",
       "click-element": "nodes/click-element/click-element.js",
+      "get-element": "nodes/get-element/get-element.js",
       "send-keys": "nodes/send-keys/send-keys.js",
       "end-session": "nodes/end-session/end-session.js",
       "go-back": "nodes/back/back.js",
