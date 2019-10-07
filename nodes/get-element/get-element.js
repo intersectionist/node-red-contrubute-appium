@@ -3,7 +3,7 @@ module.exports = function (RED) {
 
     var request = require('request');
 
-    function ClickElementNode(config) {
+    function GetElementNode(config) {
         RED.nodes.createNode(this, config);
 
 
@@ -34,7 +34,7 @@ module.exports = function (RED) {
 
                 console.log(server_address)
 
-                node.status({fill: "yellow", shape: "dot", text: 'clicking...'});
+                node.status({fill: "yellow", shape: "dot", text: 'getting...'});
                 request.post({
                     url: url,
                     json: {}
@@ -47,11 +47,11 @@ module.exports = function (RED) {
                         node.send([null, msg]);
                     } else {
                         msg.payload = body.value;
-                        // node.status({fill: "green", shape: "ring", text: 'Clicked'});
+                        node.status({fill: "green", shape: "dot", text: 'geted'});
                         node.send([msg]);
                     }
                 });
-                node.status({fill: "green", shape: "dot", text: 'clicked'});
+
             };
             call();
 
@@ -65,6 +65,6 @@ module.exports = function (RED) {
 
     }
 
-    RED.nodes.registerType("click-element", ClickElementNode);
+    RED.nodes.registerType("get-element", GetElementNode);
 
 };
